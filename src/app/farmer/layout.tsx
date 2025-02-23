@@ -1,9 +1,11 @@
-import FarmerPage from "./page";
-export default function FarmerLayout() {
+// import FarmerPage from "./page";
+export default function FarmerLayout({children}: Readonly<{
+  children: React.ReactNode;
+}>) {
     return (
      <div>
-        Farmer Layout
-      <FarmerPage />
+      Farmer Layout
+      {children}
      </div>
     );
   }
