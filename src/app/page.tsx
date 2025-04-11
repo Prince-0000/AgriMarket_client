@@ -1,35 +1,22 @@
-"use client"
-import {Button} from '@heroui/button'; 
-import { useEffect, useState } from 'react';
-import axios from "axios";
+"use client";
+
+import { useUser } from "@auth0/nextjs-auth0/client";
 
 export default function Home() {
-  const [data, setData] = useState<string>("");
+  const { user, isLoading } = useUser();
 
-  useEffect(()=>{
-    const fetchData = async()=>{
-      axios.get("http://localhost:4000/api/message")
-      .then((res)=>{
-        setData(String(res.data.message));
-        console.log(res);
-      })
-      .catch((err)=>{
-        console.error("Not found :", err);
-      })
-    
-    }
-    fetchData();
-  },[]);
+  if (isLoading) return <p>Loading...</p>;
   return (
-   <div className='h-screen'>
-      <Button>Click me</Button>
-      {data ? (
-        <div>
-          <p>{data}</p>
-        </div>
+    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
+      {user ? (
+        <>
+          <h1>Welcome, {user.name}!</h1>
+          <a href="api/auth/logout">Logout</a>
+        </>
       ) : (
-        <p>Loading...</p>
+        <a href="api/auth/login">Login</a>
       )}
-   </div>
+    </div>
+    
   );
 }
