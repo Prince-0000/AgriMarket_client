@@ -1,37 +1,31 @@
-'use client';
+// app/farmer/page.tsx
+import Dashboard from '@/components/farmer/dashboard'
+import { cookies } from 'next/headers'
 
-import { useEffect, useState } from 'react';
+export default async function FarmerPage() {
+  const cookieStore = await cookies()
+  const token = cookieStore.get('auth_token')?.value
 
-export default function Dashboard() {
-  const [data, setData] = useState(null);
+  let userData = null
 
-  useEffect(() => {
-    const fetchSecureData = async () => {
-      try {
-        const tokenRes = await fetch('/api/auth/get-token');
-        const { accessToken } = await tokenRes.json();
-        console.log(accessToken)
+  if (token) {
+    try {
+      const response = await fetch('http://localhost:4000/api/v1/auth/me', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        cache: 'no-store',
+      })
 
-        const response = await fetch('http://localhost:4000/api/farmer', {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        });
-
-        const result = await response.json();
-        setData(result);
-      } catch (err) {
-        console.error('Error fetching data:', err);
+      if (response.ok) {
+        userData = await response.json()
+      } else {
+        console.error('User data fetch failed.')
       }
-    };
+    } catch (err) {
+      console.error('Error fetching user:', err)
+    }
+  }
 
-    fetchSecureData();
-  }, []);
-
-  return (
-    <div>
-      <h1>Farmers Page</h1>
-      <pre>{JSON.stringify(data, null, 2)}</pre>
-    </div>
-  );
+  return <Dashboard user={userData} />
 }

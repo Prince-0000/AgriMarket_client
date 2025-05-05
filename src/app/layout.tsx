@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import {Providers} from "./providers";
+import { ThemeProvider } from "./providers";
 import NavbarView from "@/components/navbar/navbar";
+import { ReduxProvider } from "../store/provider";
 import { UserProvider } from "@auth0/nextjs-auth0/client";
 
 const geistSans = Geist({
@@ -26,17 +27,20 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <UserProvider>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-         <Providers>
-          <NavbarView />
-          {children}
-        </Providers>
+    <html
+      lang="en"
+      className={`${geistSans.variable} ${geistMono.variable} antialiased dark`}
+    >
+      <body>
+        <UserProvider>
+          <ReduxProvider>
+            <ThemeProvider>
+              <NavbarView />
+              {children}
+            </ThemeProvider>
+          </ReduxProvider>
+        </UserProvider>
       </body>
-      </UserProvider>
     </html>
   );
 }
