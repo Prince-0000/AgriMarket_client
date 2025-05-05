@@ -1,7 +1,12 @@
-export default function ConsumerPage() {
-    return (
-     <div className='w-full h-screen'>
-        Consumer Page
-     </div>
-    );
-  }
+'use client';
+
+
+export default function ExampleComponent() {
+ 
+
+  return (
+    <div>
+      Consumer page
+    </div>
+  );
+}

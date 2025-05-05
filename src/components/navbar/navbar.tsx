@@ -10,7 +10,11 @@ import {
   NavbarItem,
   Link,
   Button,
+  Avatar,
 } from "@heroui/react";
+import { useUser } from "@auth0/nextjs-auth0/client";
+import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem } from "@heroui/react";
+
 
 export const AcmeLogo = () => {
   return (
@@ -27,6 +31,7 @@ export const AcmeLogo = () => {
 
 export default function NavbarView() {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
+  const { user } = useUser();
 
   const menuItems = [
     "Profile",
@@ -42,14 +47,14 @@ export default function NavbarView() {
       <NavbarContent className="sm:hidden pr-3" justify="center">
         <NavbarBrand>
           <AcmeLogo />
-          <p className="font-bold text-inherit">AgriMarket</p>
+          <p className="font-bold text-inherit"><Link color="foreground" href="/">AgriMarket</Link></p>
         </NavbarBrand>
       </NavbarContent>
 
       <NavbarContent className="hidden sm:flex gap-4" justify="center">
         <NavbarBrand>
           <AcmeLogo />
-          <p className="font-bold text-inherit">AgriMarket</p>
+          <p className="font-bold text-inherit"><Link color="foreground" href="/">AgriMarket</Link></p>
         </NavbarBrand>
         <NavbarItem>
           <Link color="foreground" href="#">
@@ -68,15 +73,46 @@ export default function NavbarView() {
         </NavbarItem> */}
       </NavbarContent>
 
+      
       <NavbarContent justify="end">
-        <NavbarItem className="hidden lg:flex">
-          <Link href="api/auth/login">Login</Link>
-        </NavbarItem>
-        <NavbarItem>
-          <Button as={Link} color="warning" href="api/auth/login" variant="flat">
-            Sign Up
-          </Button>
-        </NavbarItem>
+        {!user ? (
+          <>
+            <NavbarItem className="hidden lg:flex">
+              <Link href="/api/auth/login">Login</Link>
+            </NavbarItem>
+            <NavbarItem>
+              <Button as={Link} color="warning" href="/api/auth/login" variant="flat">
+                Sign Up
+              </Button>
+            </NavbarItem>
+          </>
+        ) : (
+          <>
+            <NavbarItem className="hidden md:flex">
+              <p className="font-medium text-sm">Hello, {user.name}</p>
+            </NavbarItem>
+            <NavbarItem>
+            
+              <Dropdown>
+                <DropdownTrigger>
+                <Avatar
+                as={Link}
+                src={user.picture || "/default-avatar.png"}
+                size="sm"
+                className="cursor-pointer"
+              />
+                </DropdownTrigger>
+                <DropdownMenu aria-label="User Actions">
+                  <DropdownItem key="profile">{user.name}</DropdownItem>
+                  <DropdownItem key="dashboard">{user.email}</DropdownItem>
+                  <DropdownItem key="logout" className="text-danger">
+                    <Link color="danger" href='api/auth/logout'>Logout</Link>
+                  </DropdownItem>
+                </DropdownMenu>
+              </Dropdown>
+            </NavbarItem>
+          </>
+        )}
       </NavbarContent>
 
       <NavbarMenu>
