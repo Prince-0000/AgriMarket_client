@@ -1,6 +1,5 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
-import { redirect } from 'next/navigation'
 
 export function middleware(request: NextRequest) {
   const token = request.cookies.get('auth_token')?.value
@@ -8,18 +7,20 @@ export function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname
   const origin = request.nextUrl.origin
 
-  if(!token){
-    redirect('api/auth/login');
-  }
+
 
   // Skip middleware for static files or API routes
   if (pathname.startsWith('/_next') || pathname.startsWith('/api') || pathname === '/favicon.ico') {
     return NextResponse.next()
   }
 
-  // Allow access to unauthorized page itself
-  if (pathname === '/unauthorized') {
+  if (pathname === '/' || pathname === '/unauthorized') {
     return NextResponse.next()
+  }
+
+  // Redirect unauthenticated users to home page
+  if (!token) {
+    return NextResponse.redirect(new URL('/', origin))
   }
 
   // If user tries to access another role's route, redirect to unauthorized

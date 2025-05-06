@@ -1,7 +1,7 @@
 // app/setup-profile/page.tsx
 import { getAuthToken } from '@/lib/auth'
 import { redirect } from 'next/navigation'
-import SetupProfile from '@/components/auth/SetupProfile';
+import SetupProfile from '@/components/auth/setupProfile';
 
 export default async function Page() {
   const token = await getAuthToken()

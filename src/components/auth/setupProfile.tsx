@@ -2,7 +2,6 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
 import { setCookie } from 'cookies-next'
 import { useDispatch } from 'react-redux'
 import { setAuthData } from '@/store/slices/authSlice'
@@ -31,7 +30,6 @@ export default function SetupProfileClient({ token }: Props) {
     license_number: '',
     preferred_category: '',
   })
-  const router = useRouter()
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
 
@@ -105,7 +103,7 @@ export default function SetupProfileClient({ token }: Props) {
       // Update role in Redux store
       dispatch(setAuthData({ token, role }))
 
-      router.push(`/${role}`)
+      window.location.href = `/${role}`
     } catch (err: any) {
       setError(err.message || 'An error occurred during profile setup')
     } finally {
