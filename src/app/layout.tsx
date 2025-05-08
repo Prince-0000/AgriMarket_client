@@ -8,6 +8,7 @@ import { UserProvider } from "@auth0/nextjs-auth0/client";
 // import DashboardPage from "@/components/navbar/verticalNav";
 import LayoutWrapper from "./layoutWrapper";
 import { getAuth } from "./hooks/useAuth";
+import AuthProvider from "./providers/authProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -40,6 +41,7 @@ const { role } = await getAuth();
         <UserProvider>
           <ReduxProvider>
             <ThemeProvider>
+              <AuthProvider />
               <NavbarView />
               <LayoutWrapper role={role} >{children}</LayoutWrapper>
             </ThemeProvider>

@@ -1,7 +1,8 @@
+
 const Page = () => {
   return (
     <div>
-      Auction list page
+      Card Page
     </div>
   )
 }

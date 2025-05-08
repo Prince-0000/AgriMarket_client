@@ -1,9 +1,15 @@
-const Page = () => {
-  return (
-    <div>
-        Product view page
-    </div>
-  )
-}
+/* eslint-disable @typescript-eslint/no-explicit-any */
+// app/farmer/products/page.tsx
+import { getFarmerProducts } from "@/lib/api/farmer";
+import { getAuth } from "@/app/hooks/useAuth";
+import TablePage from "@/components/farmer/tableView";
 
-export default Page
+const FarmerProductPage = async () => {
+  const { token, role_id }: any = await getAuth();
+  const products = await getFarmerProducts(token, role_id);
+
+  return <TablePage initialProducts={products} />;
+};
+
+export default FarmerProductPage;
+

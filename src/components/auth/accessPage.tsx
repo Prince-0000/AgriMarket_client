@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
 import { setAuthData } from '@/store/slices/authSlice';
 import { useRouter } from 'next/navigation';
 
@@ -11,11 +10,9 @@ interface Props {
 }
 
 export default function AccessPage({ token, role }: Props) {
-  const dispatch = useDispatch();
   const router = useRouter();
 
   useEffect(() => {
-    dispatch(setAuthData({ token, role }));
 
     switch (role) {
       case 'farmer':
@@ -30,7 +27,7 @@ export default function AccessPage({ token, role }: Props) {
       default:
         router.push('/setup-profile');
     }
-  }, [dispatch, token, role]);
+  }, [token, role]);
 
   return <div>Redirecting you based on your role...</div>;
 }

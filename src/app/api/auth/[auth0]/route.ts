@@ -4,6 +4,7 @@
 import { handleAuth, handleCallback} from '@auth0/nextjs-auth0';
 import { cookies } from 'next/headers';
 
+
 export const GET = handleAuth({
   
   callback: handleCallback({
@@ -25,6 +26,21 @@ export const GET = handleAuth({
         maxAge: 60 * 60 * 24 // 1 day
       });
       
+      const roleId =
+      user.farmer?.farmer_id ||
+      user.consumer?.consumer_id ||
+      user.retailer?.retailer_id ||
+      null;
+
+    if (roleId) {
+      cookieStore.set('role_id', roleId.toString(), {
+        httpOnly: false, // if you need client-side access
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'lax',
+        maxAge: 60 * 60 * 24 // 1 day
+      });
+    }
+    
       // Keep token httpOnly for security
       cookieStore.set('auth_token', session.accessToken, {
         httpOnly: true,

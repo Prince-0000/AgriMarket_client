@@ -3,7 +3,7 @@ import AccessPage from '@/components/auth/accessPage';
 import { redirect } from 'next/navigation';
 
 export default async function Page() {
-  const token = await getAuthToken(); // Server-side token from cookies/session
+  const token = await getAuthToken();
 
   if (!token) {
     redirect('/api/auth/login');

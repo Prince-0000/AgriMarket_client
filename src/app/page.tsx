@@ -2,9 +2,17 @@
 
 import { useUser } from '@auth0/nextjs-auth0/client';
 import Link from 'next/link';
+import { useDispatch } from 'react-redux';
+import { clearAuth } from '../store/slices/authSlice'
 
 export default function HomePage() {
   const { user } = useUser();
+  const dispatch = useDispatch();
+  
+  const handleClear = () => {
+    console.log("in handle clear");
+    dispatch(clearAuth());
+  };
 
   return (
     <main className="p-4">
@@ -19,6 +27,8 @@ export default function HomePage() {
       <div>
         <Link href='/access'>Go to Dashboard</Link>
       </div>
+      <br/>
+      <button onClick={handleClear}>Clear Redux Auth</button>
     </main>
   );
 }
