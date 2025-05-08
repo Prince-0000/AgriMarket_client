@@ -1,12 +1,14 @@
 'use client';
 
+import ProductCard from "@/components/consumer/productCard";
 
-export default function ExampleComponent() {
+
+export default function Page() {
  
 
   return (
     <div>
-      Consumer page
+      <ProductCard />
     </div>
   );
 }

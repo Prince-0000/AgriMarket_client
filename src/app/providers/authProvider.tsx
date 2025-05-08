@@ -12,9 +12,7 @@ export default function AuthProvider() {
     const fetchToken = async () => {
       try {
         const res = await fetch('/api/auth/token');
-        console.log(res);
         const { role, roleId, token } = await res.json();
-        console.log(role, roleId, token);
 
         // dispatch(clearAuth());
         dispatch(setAuthData({ role, roleId, token }));

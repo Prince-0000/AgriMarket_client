@@ -40,8 +40,6 @@ export const AddUserDrawer = ({
   const token = useSelector((state:any)=>state.auth.token);
   const roleId = useSelector((state:any)=>state.auth.roleId);
 
-  console.log(roleId, token)
-
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [category, setCategory] = useState("");

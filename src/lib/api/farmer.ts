@@ -6,7 +6,6 @@ export const getFarmerProducts = async (token:string | null, role_id:string | nu
   if (!token || !role_id) {
     throw new Error("Missing token or role_id");
   }
-  console.log("in api",token, role_id);
   const res = await fetch(`http://localhost:4000/api/v1/farmer/products/${role_id}`, {
     method: "GET",
     headers: {
@@ -20,7 +19,6 @@ export const getFarmerProducts = async (token:string | null, role_id:string | nu
 };
 
 export const addProduct = async (farmerId: number, product: Partial<Product>,token:string | null) => {
-  console.log("in farmer", farmerId);
   const res = await fetch(`http://localhost:4000/api/v1/farmer/add/${farmerId}`, {
     method: "POST",
     headers: {

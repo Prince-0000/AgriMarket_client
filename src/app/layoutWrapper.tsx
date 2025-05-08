@@ -5,7 +5,7 @@
 import { usePathname } from "next/navigation";
 import Sidebar from "@/components/navbar/verticalNav/sidebar";
 
-const publicRoutes = ["/","/access"];
+const publicRoutes = ["/","/access","/consumer"];
 
 export default function LayoutWrapper({
   children,

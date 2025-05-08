@@ -9,7 +9,6 @@ export const GET = handleAuth({
   
   callback: handleCallback({
     afterCallback: async (req:any, session:any) => {
-      // console.log("session", session.token)
       const response = await fetch('http://localhost:4000/api/v1/auth/me', {
         headers: {
           Authorization: `Bearer ${session.accessToken}`,
