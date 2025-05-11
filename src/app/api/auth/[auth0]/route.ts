@@ -17,6 +17,7 @@ export const GET = handleAuth({
       
       const user = await response.json();
       const cookieStore = await cookies()
+      console.log(response);
       // Set cookies that will be used across the app
       const res = cookieStore.set('user_role', user.role, {
         httpOnly: false, // if you need client-side access
@@ -33,7 +34,7 @@ export const GET = handleAuth({
 
     if (roleId) {
       cookieStore.set('role_id', roleId.toString(), {
-        httpOnly: false, // if you need client-side access
+        httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
         sameSite: 'lax',
         maxAge: 60 * 60 * 24 // 1 day

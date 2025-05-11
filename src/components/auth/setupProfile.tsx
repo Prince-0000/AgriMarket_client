@@ -1,14 +1,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { setCookie } from 'cookies-next'
-import { useDispatch } from 'react-redux'
-import { setAuthData } from '@/store/slices/authSlice'
+// import { useDispatch } from 'react-redux'
+// import { setAuthData } from '@/store/slices/authSlice'
 
 interface ProfileData {
   farm_name: string
   location: string
+  pincode: string
   business_name: string
   license_number: string
   preferred_category: string
@@ -21,11 +22,12 @@ interface Props {
 }
 
 export default function SetupProfileClient({ token }: Props) {
-  const dispatch = useDispatch()
+  // const dispatch = useDispatch()
   const [role, setRole] = useState<UserRole>('farmer')
   const [profileData, setProfileData] = useState<ProfileData>({
     farm_name: '',
     location: '',
+    pincode: '',
     business_name: '',
     license_number: '',
     preferred_category: '',
@@ -33,11 +35,11 @@ export default function SetupProfileClient({ token }: Props) {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
 
-  useEffect(() => {
-    if (token) {
-      dispatch(setAuthData({ token, role: '' })) // role will be set on submission
-    }
-  }, [token, dispatch])
+  // useEffect(() => {
+  //   if (token) {
+  //     dispatch(setAuthData({ token, role: '' })) // role will be set on submission
+  //   }
+  // }, [token, dispatch])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -51,11 +53,12 @@ export default function SetupProfileClient({ token }: Props) {
 
       switch (role) {
         case 'farmer':
-          if (!profileData.farm_name || !profileData.location)
-            throw new Error('Farm name and location are required')
+          if (!profileData.farm_name || !profileData.location || !profileData.pincode)
+            throw new Error('Farm name, location, and pincode are required')
           profilePayload = {
             farm_name: profileData.farm_name,
             location: profileData.location,
+            pincode: profileData.pincode,
           }
           break
         case 'retailer':
@@ -101,7 +104,7 @@ export default function SetupProfileClient({ token }: Props) {
       })
 
       // Update role in Redux store
-      dispatch(setAuthData({ token, role }))
+      // dispatch(setAuthData({ token, role }))
 
       window.location.href = `/${role}`
     } catch (err: any) {
@@ -138,6 +141,8 @@ export default function SetupProfileClient({ token }: Props) {
               onChange={(e) => setProfileData({ ...profileData, farm_name: e.target.value })} />
             <Input label="Location" name="location" value={profileData.location}
               onChange={(e) => setProfileData({ ...profileData, location: e.target.value })} />
+            <Input label="Pincode" name="pincode" value={profileData.pincode}
+              onChange={(e) => setProfileData({ ...profileData, pincode: e.target.value })} />
           </>
         )}
 
@@ -151,8 +156,18 @@ export default function SetupProfileClient({ token }: Props) {
         )}
 
         {role === 'consumer' && (
-          <Input label="Preferred Category" name="preferred_category" value={profileData.preferred_category}
-            onChange={(e) => setProfileData({ ...profileData, preferred_category: e.target.value })} />
+          <div>
+            <label className="block font-medium mb-1">Preferred Category</label>
+            <select
+              className="w-full border px-4 py-2 rounded-lg"
+              value={profileData.preferred_category}
+              onChange={(e) => setProfileData({ ...profileData, preferred_category: e.target.value })}
+            >
+              <option value="">Select Category</option>
+              <option value="organic">Organic</option>
+              <option value="conventional">Conventional</option>
+            </select>
+          </div>
         )}
 
         {error && <p className="text-red-600 text-center">{error}</p>}

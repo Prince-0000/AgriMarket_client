@@ -1,6 +1,6 @@
 'use client';
 
-import ProductCard from "@/components/consumer/productCard";
+import ProductPage from "@/components/consumer/productPage";
 
 
 export default function Page() {
@@ -8,7 +8,7 @@ export default function Page() {
 
   return (
     <div>
-      <ProductCard />
+      <ProductPage />
     </div>
   );
 }

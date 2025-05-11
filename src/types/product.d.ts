@@ -8,4 +8,10 @@ export interface Product {
     image_url: string;
     farmer_id: number;
   }
+  export interface Products {
+  id: string;
+  title: string;
+  price: number;
+  image: string;
+}
   

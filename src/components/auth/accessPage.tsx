@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect } from 'react';
-import { setAuthData } from '@/store/slices/authSlice';
 import { useRouter } from 'next/navigation';
 
 interface Props {

@@ -15,6 +15,7 @@ export default async function Page() {
     },
     cache: 'no-store',
   });
+  console.log(res);
 
   if (!res.ok) {
     redirect('/api/auth/login');

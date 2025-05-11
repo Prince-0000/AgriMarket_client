@@ -1,67 +1,29 @@
-import {Card, CardBody, CardFooter, Image} from "@heroui/react";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { Card, CardBody, CardFooter, Image } from "@heroui/react";
+// import { Products } from "@/types/product"; // adjust path as needed
+import { useRouter } from "next/navigation";
+import Pic from "@/images/image.png"
 
-export default function ProductCard() {
-  const list = [
-    {
-      title: "Orange",
-      img: "/images/fruit-1.jpeg",
-      price: "$5.50",
-    },
-    {
-      title: "Tangerine",
-      img: "/images/fruit-2.jpeg",
-      price: "$3.00",
-    },
-    {
-      title: "Raspberry",
-      img: "/images/fruit-3.jpeg",
-      price: "$10.00",
-    },
-    {
-      title: "Lemon",
-      img: "/images/fruit-4.jpeg",
-      price: "$5.30",
-    },
-    {
-      title: "Avocado",
-      img: "/images/fruit-5.jpeg",
-      price: "$15.70",
-    },
-    {
-      title: "Lemon 2",
-      img: "/images/fruit-6.jpeg",
-      price: "$8.00",
-    },
-    {
-      title: "Banana",
-      img: "/images/fruit-7.jpeg",
-      price: "$7.50",
-    },
-    {
-      title: "Watermelon",
-      img: "/images/fruit-8.jpeg",
-      price: "$12.20",
-    },
-  ];
-
+export default function ProductCard({ list }: { list: any}) {
+  console.log(list);
+  const router = useRouter();
   return (
     <div className="gap-2 grid grid-cols-2 sm:grid-cols-4">
-      {list.map((item, index) => (
-        /* eslint-disable no-console */
-        <Card key={index} isPressable shadow="sm" onPress={() => console.log("item pressed")}>
+      {list?.map((item:any, index:any) => (
+        <Card key={index} isPressable shadow="sm" onPress={() => router.push(`consumer/products/${item.product_id}`)}>
           <CardBody className="overflow-visible p-0">
             <Image
               alt={item.title}
-              className="w-full object-cover h-[140px]"
+              className="w-full object-content h-[140px]"
               radius="lg"
               shadow="sm"
-              src={item.img}
+              src={Pic.src}
               width="100%"
             />
           </CardBody>
-          <CardFooter className="text-small justify-between">
-            <b>{item.title}</b>
-            <p className="text-default-500">{item.price}</p>
+          <CardFooter className="text-white text-small justify-between">
+            <b>{item.name}</b>
+            <p className="text-default-500">${item.price_per_unit}</p>
           </CardFooter>
         </Card>
       ))}

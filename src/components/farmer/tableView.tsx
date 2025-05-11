@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   Table,
   TableHeader,
@@ -31,8 +31,9 @@ const columns = [
   { name: "ACTIONS", uid: "actions" },
 ]; 
 
-export default function TablePage({ initialProducts }: Props) {
-  const [products, setProducts] = useState(initialProducts);
+export default function TablePage() {
+
+  const [products, setProducts] = useState<Product[]>([]);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
   const { 
@@ -44,8 +45,19 @@ export default function TablePage({ initialProducts }: Props) {
   const token = useSelector((state:any)=>state.auth.token);
   const farmerId = useSelector((state:any)=>state.auth.roleId);
 
+
+ useEffect(() => {
+  const fetch = async () => {
+    if (token && farmerId) {
+      const res: any = await getFarmerProducts(token, farmerId);
+      setProducts(res);
+    }
+  };
+  fetch();
+}, [token, farmerId]);
+
   const refetchProducts = useCallback(async () => {
-    const updated = await getFarmerProducts(token, farmerId);
+    const updated:any = await getFarmerProducts(token, farmerId);
     setProducts(updated);
   }, [token, farmerId]);
 
@@ -128,7 +140,7 @@ export default function TablePage({ initialProducts }: Props) {
           )}
         </TableHeader>
         <TableBody items={products}>
-          {(item) => (
+          {(item:any) => (
             <TableRow key={item.product_id}>
               {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}
             </TableRow>
