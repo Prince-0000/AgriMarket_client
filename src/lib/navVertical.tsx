@@ -1,5 +1,5 @@
 // lib/navItems.ts
-import { HomeIcon, SettingsIcon, UserIcon, ShieldCheckIcon } from "lucide-react";
+import { HomeIcon, SettingsIcon } from "lucide-react";
 import { JSX } from "react";
 
 export interface NavItem {
@@ -17,21 +17,9 @@ export const navItems: NavItem[] = [
     roles: ["farmer"],
   },
   {
-    label: "Dashboard",
-    href: "/farmer",
-    icon: () => <HomeIcon size={18} />,
-    roles: ["farmer"],
-  },
-  {
     label: "Auction List",
     href: "/farmer/auctions/list",
     icon: () => <HomeIcon size={18} />,
-    roles: ["farmer"],
-  },
-  {
-    label: "Add Products",
-    href: "/farmer/products/add",
-    icon: () => <UserIcon size={18} />,
     roles: ["farmer"],
   },
   {
@@ -41,28 +29,9 @@ export const navItems: NavItem[] = [
     roles: ["farmer"],
   },
   {
-    label: "Manage Inventory",
-    href: "/farmer",
-    icon: () => <ShieldCheckIcon size={18} />,
-    roles: ["farmer"],
-  },
-
-  {
     label: "Dashboard",
     href: "/dashboard",
     icon: () => <HomeIcon size={18} />,
-    roles: ["admin", "supplier"],
-  },
-  {
-    label: "Dashboard",
-    href: "/dashboard",
-    icon: () => <HomeIcon size={18} />,
-    roles: ["admin", "retailer"],
-  },
-  {
-    label: "Dashboard",
-    href: "/dashboard",
-    icon: () => <HomeIcon size={18} />,
-    roles: ["admin", "consumer"],
+    roles: ["retailer"],
   },
 ];
