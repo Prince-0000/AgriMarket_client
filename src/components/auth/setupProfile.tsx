@@ -11,8 +11,8 @@ interface ProfileData {
   location: string
   pincode: string
   business_name: string
-  license_number: string
   preferred_category: string
+  phone: string
 }
 
 type UserRole = 'farmer' | 'retailer' | 'consumer'
@@ -29,8 +29,8 @@ export default function SetupProfileClient({ token }: Props) {
     location: '',
     pincode: '',
     business_name: '',
-    license_number: '',
     preferred_category: '',
+    phone: ''
   })
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
@@ -59,14 +59,15 @@ export default function SetupProfileClient({ token }: Props) {
             farm_name: profileData.farm_name,
             location: profileData.location,
             pincode: profileData.pincode,
+            phone: profileData.phone
           }
           break
         case 'retailer':
-          if (!profileData.business_name || !profileData.license_number)
+          if (!profileData.business_name)
             throw new Error('Business name and license number are required')
           profilePayload = {
             business_name: profileData.business_name,
-            license_number: profileData.license_number,
+
           }
           break
         case 'consumer':
@@ -143,6 +144,8 @@ export default function SetupProfileClient({ token }: Props) {
               onChange={(e) => setProfileData({ ...profileData, location: e.target.value })} />
             <Input label="Pincode" name="pincode" value={profileData.pincode}
               onChange={(e) => setProfileData({ ...profileData, pincode: e.target.value })} />
+            <Input label="Phone" name="phone" value={profileData.phone}
+              onChange={(e) => setProfileData({ ...profileData, phone: e.target.value })} />
           </>
         )}
 
@@ -150,8 +153,6 @@ export default function SetupProfileClient({ token }: Props) {
           <>
             <Input label="Business Name" name="business_name" value={profileData.business_name}
               onChange={(e) => setProfileData({ ...profileData, business_name: e.target.value })} />
-            <Input label="License Number" name="license_number" value={profileData.license_number}
-              onChange={(e) => setProfileData({ ...profileData, license_number: e.target.value })} />
           </>
         )}
 
