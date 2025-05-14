@@ -39,6 +39,7 @@ export default function NavbarView() {
   ];
 
   return (
+    <>
     <Navbar isBordered isMenuOpen={isMenuOpen} onMenuOpenChange={setIsMenuOpen}>
       <NavbarContent className="sm:hidden" justify="start">
         <NavbarMenuToggle aria-label={isMenuOpen ? "Close menu" : "Open menu"} />
@@ -78,10 +79,10 @@ export default function NavbarView() {
         {!user ? (
           <>
             <NavbarItem className="hidden lg:flex">
-              <Link href="/api/auth/login">Login</Link>
+              <Link href="/api/auth/login?returnTo=access">Login</Link>
             </NavbarItem>
             <NavbarItem>
-              <Button as={Link} color="warning" href="/api/auth/login" variant="flat">
+              <Button as={Link} color="warning" href="/api/auth/login?returnTo=access" variant="flat">
                 Sign Up
               </Button>
             </NavbarItem>
@@ -132,6 +133,7 @@ export default function NavbarView() {
         ))}
       </NavbarMenu>
     </Navbar>
+    </>
   );
 }
 

@@ -1,7 +1,10 @@
-export default function RetailerPage() {
+'use client'
+import ProductPage from "@/components/consumer/productPage";
+
+export default function Page() {
     return (
      <div className='w-full h-screen'>
-        Retailer Page
+         <ProductPage />
      </div>
     );
   }
