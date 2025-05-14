@@ -10,8 +10,15 @@ interface Props {
 export default function ClientDashboard({ user }: Props) {
   return (
     <div>
-      <h1>Farmer Dashboard</h1>
-      <pre>{JSON.stringify(user, null, 2)}</pre>
+      <h1>Welcome, {user?.name}</h1>
+      <div className='flex '>
+        <div>
+        
+        </div>
+        <div>
+
+        </div>
+      </div>
     </div>
   )
 }

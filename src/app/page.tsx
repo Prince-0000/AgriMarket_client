@@ -6,6 +6,7 @@ import Link from 'next/link';
 export default function HomePage() {
   const { user } = useUser();
 
+
   return (
     <main className="p-4">
       <h1 className="text-2xl font-semibold">Welcome to the Dashboard</h1>
