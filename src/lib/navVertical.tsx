@@ -29,9 +29,16 @@ export const navItems: NavItem[] = [
     roles: ["farmer"],
   },
   {
-    label: "Dashboard",
-    href: "/dashboard",
+    label: "Products",
+    href: "/retailer",
     icon: () => <HomeIcon size={18} />,
     roles: ["retailer"],
   },
+   {
+    label: "Join Auction",
+    href: "/retailer/auctions",
+    icon: () => <HomeIcon size={18} />,
+    roles: ["retailer"],
+  },
+  
 ];

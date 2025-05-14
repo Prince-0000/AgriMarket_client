@@ -42,7 +42,7 @@ export default function ProductPage() {
 
     if (pincode) {
       fetchProducts();
-    } else if (role === 'consumer') {
+    } else if (role === 'consumer' || role==='retailer') {
       onOpen();
     }
   }, [pincode, role, onOpen]);

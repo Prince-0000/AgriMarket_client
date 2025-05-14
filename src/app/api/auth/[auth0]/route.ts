@@ -1,56 +1,60 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // app/api/auth/[...auth0]/route.ts
-import { handleAuth, handleCallback} from '@auth0/nextjs-auth0';
-import { cookies } from 'next/headers';
+import { handleAuth, handleCallback } from "@auth0/nextjs-auth0";
+import { cookies } from "next/headers";
 
+const isProduction = process.env.NODE_ENV === "production";
 
 export const GET = handleAuth({
-  
   callback: handleCallback({
-    afterCallback: async (req:any, session:any) => {
-      const response = await fetch('http://localhost:4000/api/v1/auth/me', {
-        headers: {
-          Authorization: `Bearer ${session.accessToken}`,
-        },
-      });
-      
-      const user = await response.json();
-      const cookieStore = await cookies()
-      console.log(response);
-      // Set cookies that will be used across the app
-      const res = cookieStore.set('user_role', user.role, {
-        httpOnly: false, // if you need client-side access
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'lax',
-        maxAge: 60 * 60 * 24 // 1 day
-      });
-      
-      const roleId =
-      user.farmer?.farmer_id ||
-      user.consumer?.consumer_id ||
-      user.retailer?.retailer_id ||
-      null;
+    afterCallback: async (req: any, session: any) => {
+      try {
+        const response = await fetch("http://localhost:4000/api/v1/auth/me", {
+          headers: {
+            Authorization: `Bearer ${session.accessToken}`,
+          },
+        });
 
-    if (roleId) {
-      cookieStore.set('role_id', roleId.toString(), {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'lax',
-        maxAge: 60 * 60 * 24 // 1 day
-      });
-    }
-    
-      // Keep token httpOnly for security
-      cookieStore.set('auth_token', session.accessToken, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'lax',
-        maxAge: 60 * 60 * 24 // 1 day
-      });
+        if (!response.ok) {
+          console.error("Failed to fetch user data");
+          throw new Error("User fetch failed");
+        }
 
-      return session;
-    }
+        const user = await response.json();
+        const cookieStore = await cookies();
+
+        const cookieOptions = {
+          httpOnly: true,
+          secure: isProduction,
+          sameSite: 'lax' as const,
+          path: "/",
+          maxAge: 60 * 60 * 24, // 1 day
+        };
+
+        // Set secure cookies
+        if(user.role){
+          cookieStore.set("user_role", user.role, cookieOptions);
+        }
+
+        const roleId =
+          user.farmer?.farmer_id ||
+          user.consumer?.consumer_id ||
+          user.retailer?.retailer_id ||
+          null;
+
+        if (roleId) {
+          cookieStore.set("role_id", roleId.toString(), cookieOptions);
+        }
+
+        cookieStore.set("auth_token", session.accessToken, cookieOptions);
+
+        return session;
+      } catch (err) {
+        console.error("Callback error:", err);
+        throw new Error("Authentication processing failed");
+      }
+    },
   }),
 });
 
