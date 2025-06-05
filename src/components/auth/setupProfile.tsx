@@ -3,8 +3,6 @@
 
 import { useState } from "react";
 import { setCookie } from "cookies-next";
-// import { useDispatch } from 'react-redux'
-// import { setAuthData } from '@/store/slices/authSlice'
 
 interface ProfileData {
   farm_name: string;
@@ -22,7 +20,6 @@ interface Props {
 }
 
 export default function SetupProfileClient({ token }: Props) {
-  // const dispatch = useDispatch()
   const [role, setRole] = useState<UserRole>("farmer");
   const [profileData, setProfileData] = useState<ProfileData>({
     farm_name: "",
@@ -34,12 +31,6 @@ export default function SetupProfileClient({ token }: Props) {
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-
-  // useEffect(() => {
-  //   if (token) {
-  //     dispatch(setAuthData({ token, role: '' })) // role will be set on submission
-  //   }
-  // }, [token, dispatch])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -68,7 +59,7 @@ export default function SetupProfileClient({ token }: Props) {
           break;
         case "retailer":
           if (!profileData.business_name)
-            throw new Error("Business name and license number are required");
+            throw new Error("Business name is required");
           profilePayload = {
             business_name: profileData.business_name,
           };
@@ -82,52 +73,48 @@ export default function SetupProfileClient({ token }: Props) {
           break;
       }
 
-const res = await fetch("http://localhost:4000/api/v1/profile/setup", {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json",
-    Authorization: `Bearer ${token}`,
-  },
-  body: JSON.stringify({
-    role,
-    profileData: profilePayload,
-  }),
-});
+      const res = await fetch("http://localhost:4000/api/v1/profile/setup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          role,
+          profileData: profilePayload,
+        }),
+      });
 
-if (!res.ok) {
-  const errorData = await res.json();
-  throw new Error(errorData.message || "Profile setup failed");
-}
+      if (!res.ok) {
+        const errorData = await res.json();
+        throw new Error(errorData.message || "Profile setup failed");
+      }
 
-const responseData = await res.json();
+      const responseData = await res.json();
 
-// Save role in cookie
-setCookie("user_role", responseData.data.user.role, {
-  path: "/",
-  maxAge: 60 * 60 * 24, // 1 day
-  secure: process.env.NODE_ENV === "production",
-  sameSite: "lax",
-});
+      setCookie("user_role", responseData.data.user.role, {
+        path: "/",
+        maxAge: 60 * 60 * 24,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "lax",
+      });
 
-// Extract role-specific ID
-const roleId =
-  responseData.data.farmer_id ||
-  responseData.data.consumer_id ||
-  responseData.data.retailer_id ||
-  null;
+      const roleId =
+        responseData.data.farmer_id ||
+        responseData.data.consumer_id ||
+        responseData.data.retailer_id ||
+        null;
 
-if (roleId) {
-  setCookie("role_id", roleId.toString(), {
-    path: "/",
-    maxAge: 60 * 60 * 24,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
-  });
-}
+      if (roleId) {
+        setCookie("role_id", roleId.toString(), {
+          path: "/",
+          maxAge: 60 * 60 * 24,
+          secure: process.env.NODE_ENV === "production",
+          sameSite: "lax",
+        });
+      }
 
-// Redirect based on role
-window.location.href = `/${responseData.data.user.role}`;
-
+      window.location.href = `/${responseData.data.user.role}`;
     } catch (err: any) {
       setError(err.message || "An error occurred during profile setup");
     } finally {
@@ -136,19 +123,21 @@ window.location.href = `/${responseData.data.user.role}`;
   };
 
   return (
-    <div className="darkMode min-h-screen flex items-center justify-center bg-gray-100 px-4">
+    <div className="min-h-screen flex items-center justify-center bg-green-50 px-4">
       <form
         onSubmit={handleSubmit}
-        className="bg-white p-8 shadow-xl rounded-xl space-y-6 w-full max-w-lg"
+        className="bg-white p-8 shadow-lg rounded-xl space-y-6 w-full max-w-lg border border-green-200"
       >
-        <h2 className="text-2xl font-semibold text-center">
+        <h2 className="text-2xl font-semibold text-center text-green-800">
           Complete Your Profile
         </h2>
 
         <div>
-          <label className="block font-medium mb-1">Select Role</label>
+          <label className="block font-medium mb-1 text-green-700">
+            Select Role
+          </label>
           <select
-            className="w-full border rounded-lg px-4 py-2"
+            className="w-full border border-green-300 rounded-lg px-4 py-2 bg-white"
             value={role}
             onChange={(e) => setRole(e.target.value as UserRole)}
           >
@@ -196,26 +185,26 @@ window.location.href = `/${responseData.data.user.role}`;
         )}
 
         {role === "retailer" && (
-          <>
-            <Input
-              label="Business Name"
-              name="business_name"
-              value={profileData.business_name}
-              onChange={(e) =>
-                setProfileData({
-                  ...profileData,
-                  business_name: e.target.value,
-                })
-              }
-            />
-          </>
+          <Input
+            label="Business Name"
+            name="business_name"
+            value={profileData.business_name}
+            onChange={(e) =>
+              setProfileData({
+                ...profileData,
+                business_name: e.target.value,
+              })
+            }
+          />
         )}
 
         {role === "consumer" && (
           <div>
-            <label className="block font-medium mb-1">Preferred Category</label>
+            <label className="block font-medium mb-1 text-green-700">
+              Preferred Category
+            </label>
             <select
-              className="w-full border px-4 py-2 rounded-lg"
+              className="w-full border border-green-300 px-4 py-2 rounded-lg bg-white"
               value={profileData.preferred_category}
               onChange={(e) =>
                 setProfileData({
@@ -236,7 +225,7 @@ window.location.href = `/${responseData.data.user.role}`;
         <button
           type="submit"
           disabled={loading}
-          className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition"
+          className="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition"
         >
           {loading ? "Submitting..." : "Submit"}
         </button>
@@ -258,10 +247,10 @@ function Input({
 }) {
   return (
     <div>
-      <label className="block font-medium mb-1">{label}</label>
+      <label className="block font-medium mb-1 text-green-700">{label}</label>
       <input
         name={name}
-        className="w-full border px-4 py-2 rounded-lg"
+        className="w-full border border-green-300 px-4 py-2 rounded-lg bg-white"
         value={value}
         onChange={onChange}
       />

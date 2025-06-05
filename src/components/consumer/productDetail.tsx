@@ -4,7 +4,7 @@ import { FaWhatsapp, FaPhone, FaStore } from "react-icons/fa";
 import Pic from "@/images/image.png";
 
 interface Farmer {
-  phone_number: string;
+  phone: string;
   farm_name: string;
   location: string;
 }
@@ -31,7 +31,6 @@ export default function ProductDetailComponent({ product, loading, error }: Prod
   if (error) return <div className="p-6 text-red-500">{error}</div>;
   if (!product) return <div className="p-6">Product not found</div>;
 
-  // Prepare WhatsApp message
   const whatsappMessage = `Hi, I'm interested in your product "${product.name}" (₹${product.price_per_unit}). Is it still available?`;
   const encodedMessage = encodeURIComponent(whatsappMessage);
   const whatsappUrl = `https://wa.me/${product.farmer.phone_number}?text=${encodedMessage}`;
@@ -71,14 +70,14 @@ export default function ProductDetailComponent({ product, loading, error }: Prod
             <div className="flex items-center space-x-2">
               <div className={`w-3 h-3 rounded-full ${product?.quantity_available > 0 ? 'bg-green-500' : 'bg-red-500'}`} />
               <span className="text-sm font-medium">
-                {product?.quantity_available > 0 
-                  ? `${product?.quantity_available} available` 
+                {product?.quantity_available > 0
+                  ? `${product?.quantity_available} available`
                   : 'Out of stock'}
               </span>
             </div>
           </div>
 
-          {/* Farmer Details with Contact Options */}
+          {/* Farmer Details with Contact */}
           <div className="pt-6 border-t border-gray-200">
             <h3 className="text-lg font-medium text-gray-900">Farmer Details</h3>
             <div className="mt-4 flex items-center space-x-4">
@@ -97,7 +96,18 @@ export default function ProductDetailComponent({ product, loading, error }: Prod
               </div>
             </div>
 
-            {/* Contact Options */}
+            {/* Contact Details */}
+            <div className="mt-6 space-y-2">
+              <h4 className="text-sm font-semibold text-gray-700">Contact Details</h4>
+              <p className="text-sm text-gray-600">
+                <span className="font-medium">Phone:</span> {product.farmer.phone}
+              </p>
+              <p className="text-sm text-gray-600">
+                <span className="font-medium">Address:</span> {product.farmer.location}
+              </p>
+            </div>
+
+            {/* Buttons */}
             <div className="mt-6 grid grid-cols-2 gap-4">
               <a
                 href={whatsappUrl}
@@ -109,7 +119,7 @@ export default function ProductDetailComponent({ product, loading, error }: Prod
                 WhatsApp
               </a>
               <a
-                href={`tel:${product.farmer.phone_number}`}
+                href={`tel:${product.farmer.phone}`}
                 className="flex items-center justify-center gap-2 px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors duration-200"
               >
                 <FaPhone className="w-5 h-5" />
@@ -118,12 +128,7 @@ export default function ProductDetailComponent({ product, loading, error }: Prod
             </div>
           </div>
 
-          <button
-            className="w-full px-8 py-3 bg-green-600 hover:bg-green-700 text-white font-medium rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
-            disabled={product?.quantity_available <= 0}
-          >
-            {product?.quantity_available > 0 ? 'Add to Cart' : 'Notify When Available'}
-          </button>
+    
         </div>
       </div>
     </div>

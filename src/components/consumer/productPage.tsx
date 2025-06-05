@@ -22,6 +22,7 @@ export default function ProductPage() {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const pincode = useSelector((state: any) => state.user.pincode);
   const role = useSelector((state: any) => state.auth.role);
+  const token = useSelector((state:any)=>state.auth.token);
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(false);
 
@@ -30,7 +31,11 @@ export default function ProductPage() {
       try {
         setLoading(true);
         const res = await axios.get(
-          `http://localhost:4000/api/v1/products/pin/list?pincode=${pincode}`
+          `http://localhost:4000/api/v1/products/pin/list?pincode=${pincode}`, {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          }
         );
         setProducts(res.data.products);
       } catch (error) {
@@ -64,7 +69,7 @@ export default function ProductPage() {
           </span>
           <Button 
             size="sm" 
-            variant="light" 
+            variant="solid" 
             onPress={onOpen}
           >
             Change

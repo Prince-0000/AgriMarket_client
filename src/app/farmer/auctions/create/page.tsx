@@ -1,7 +1,11 @@
-export default function CreateAuction() {
-    return (
-     <div className='w-full h-screen'>
-        Farmer Create Auction page
-     </div>
-    );
-  }
+import CreateAuction from "@/components/farmer/createAuction"
+
+const Page = () => {
+  return (
+    <div>
+      <CreateAuction />
+    </div>
+  )
+}
+
+export default Page

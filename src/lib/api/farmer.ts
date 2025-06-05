@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Product } from "@/types/product";
+import axios from "axios";
 
 export const getFarmerProducts = async (token:string | null, role_id:string | null): Promise<Product[]> => {
   
@@ -56,4 +57,21 @@ export const deleteProduct = async (productId: number, token: string | null) => 
   if (!res.ok) throw new Error("Failed to delete product");
   return res.json();
 };
+
+export async function fetchRetailers(token: string) {
+  const res = await axios.get(`http://localhost:4000/api/v1/retailer/list`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  return res.data;
+}
+
+export async function createAuction(payload: any, token: string) {
+  const res = await axios.post(`http://localhost:4000/api/v1/auction/create`, payload, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+  });
+  return res.data;
+}
 

@@ -2,6 +2,7 @@
 
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { Spinner } from '@heroui/react'; 
 
 interface Props {
   token: string;
@@ -15,7 +16,7 @@ export default function AccessPage({ token, role }: Props) {
 
     switch (role) {
       case 'farmer':
-        router.push('/farmer');
+        router.push('/farmer/products/view');
         break;
       case 'retailer':
         router.push('/retailer');
@@ -28,5 +29,10 @@ export default function AccessPage({ token, role }: Props) {
     }
   }, [token, role]);
 
-  return <div>Redirecting you based on your role...</div>;
+  return (
+<div className="min-h-screen flex flex-col items-center justify-center bg-white">
+<Spinner size="lg" color="primary" />
+<p className="mt-4 text-gray-600 text-sm">Redirecting you based on your role...</p>
+</div>
+);
 }
